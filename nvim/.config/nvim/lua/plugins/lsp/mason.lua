@@ -22,13 +22,12 @@ return {
 		mason_lspconfig.setup({
 			ensure_installed = {
 				--"tsserver",
-				--"ts_ls",
 				"html",
-				"css",
+				--"css",
 				"tailwindcss",
 				"gopls",
 				"templ",
-				"htmx-lsp",
+				--"htmx-lsp",
 				"astro",
 				"lua_ls",
 				"graphql",
@@ -42,7 +41,6 @@ return {
 				"autotools_ls",
 				"taplo",
 				"dockerls",
-				"gitlab_ci_ls",
 			},
 			automatic_installation = true,
 		})
@@ -50,8 +48,7 @@ return {
 			ensure_installed = {
 				"prettier",
 				"stylua",
-				"eslint_d",
-				"eslint", -- not sure with the eslint_d
+				"eslint",
 				"tflint",
 				"tfsec",
 				"mdformat",
