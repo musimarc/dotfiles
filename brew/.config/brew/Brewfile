@@ -37,6 +37,7 @@ brew "granted"
 brew "go"
 brew "nvm"
 brew "jenv"
+brew "yarn"
 cask "pgadmin4"
 
 # Git
@@ -97,8 +98,4 @@ cask "slack"
 # IDE
 brew "neovim"
 cask "visual-studio-code"
-vscode "astro-build.astro-vscode"
-vscode "bradlc.vscode-tailwindcss"
-vscode "eamodio.gitlens"
-vscode "esbenp.prettier-vscode"
-vscode "hashicorp.terraform"
+
