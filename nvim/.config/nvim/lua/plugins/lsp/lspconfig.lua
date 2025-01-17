@@ -2,7 +2,16 @@ return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
+		-- Autocompletion
+		{ "hrsh7th/nvim-cmp" }, -- Required
+		"hrsh7th/cmp-nvim-lsp", -- Required
+		{ "L3MON4D3/LuaSnip" }, -- Required
+		{ "rafamadriz/friendly-snippets" },
+		{ "hrsh7th/cmp-buffer" },
+		{ "hrsh7th/cmp-path" },
+		{ "hrsh7th/cmp-cmdline" },
+		{ "saadparwaiz1/cmp_luasnip" },
+
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 		{ "folke/neodev.nvim", opts = {} },
 	},
@@ -134,6 +143,30 @@ return {
 					},
 				})
 			end,
+		})
+
+		local cmp = require("cmp")
+		-- `/` cmdline setup.
+		cmp.setup.cmdline("/", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = {
+				{ name = "buffer" },
+			},
+		})
+
+		-- `:` cmdline setup.
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path" },
+			}, {
+				{
+					name = "cmdline",
+					option = {
+						ignore_cmds = { "Man", "!" },
+					},
+				},
+			}),
 		})
 	end,
 }
