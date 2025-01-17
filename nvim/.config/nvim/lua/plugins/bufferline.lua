@@ -6,8 +6,8 @@ return {
 	branch = "main",
 	opts = {
 		options = {
-			-- mode = "buffers",
-			mode = "tabs",
+			mode = "buffers",
+			--mode = "tabs",
 			separator_style = "slant",
 			diagnostics = "nvim_lsp",
 			offsets = {
@@ -17,6 +17,7 @@ return {
 					text_align = "center",
 					separator = true,
 				},
+				color_icons = true,
 			},
 		},
 	},
