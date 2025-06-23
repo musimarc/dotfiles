@@ -32,9 +32,10 @@ alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
 alias zshconfig="nvim ~/.zshrc"
 
-#----------NAS----------#
-alias ssh-nas="ssh -p $NAS_PORT -L 8081:localhost:8081 -L 8086:localhost:8086 -L 5058:localhost:5058 -L 8123:localhost:8123 -L 8080:localhost:8080 -L 4755:localhost:4755 -L 9000:localhost:9000 -L 5000:localhost:5000 -L 3000:localhost:3000 -L 8099:localhost:8099 -L 8999:localhost:8999 $NAS_HOST"
-
+#----------HOMELAB----------#
+alias ssh-nas="ssh -p $NAS_PORT $NAS_HOST"
+alias ssh-homelab="ssh $HOMELAB_HOST"
+alias ssh-tunnel="ssh -D 1080 -C -N -p $NAS_PORT $NAS_HOST"
 #-----------Vault------#
 alias vl="vault list"
 alias vr="vault read"
@@ -128,25 +129,8 @@ alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time
 alias lt="ls --tree"
 
 #----ASDF----#
-echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+#echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # Should be at the end of the file for starship to work
 eval "$(starship init zsh)"
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
