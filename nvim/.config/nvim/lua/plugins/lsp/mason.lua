@@ -23,7 +23,7 @@ return {
 			ensure_installed = {
 				--"tsserver",
 				"html",
-				--"css",
+				"css-lsp",
 				"tailwindcss",
 				"gopls",
 				"templ",
