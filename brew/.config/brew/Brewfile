@@ -37,6 +37,7 @@ brew "granted"
 brew "asdf"
 brew "yarn"
 cask "pgadmin4"
+brew "pnpm"
 
 # Git
 tap "jesseduffield/lazygit"
@@ -44,6 +45,7 @@ brew "jesseduffield/lazygit/lazygit"
 tap "gabrie30/utils"
 brew "gabrie30/utils/ghorg"
 brew "pre-commit"
+brew "git-lfs"
 
 # Browsers
 cask "firefox"
@@ -84,6 +86,7 @@ brew "starship"
 cask "font-fira-code-nerd-font"
 cask "wezterm"
 cask "wifiman"
+brew "ollama"
 
 # Office
 cask "microsoft-auto-update"
