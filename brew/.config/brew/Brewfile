@@ -81,12 +81,12 @@ brew "zoxide"
 brew "zsh-syntax-highlighting"
 brew "zsh-autosuggestions"
 brew "git-delta"
-cask "rectangle"
 brew "starship"
 cask "font-fira-code-nerd-font"
 cask "wezterm"
 cask "wifiman"
 brew "ollama"
+cask "nikitabobko/tap/aerospace"
 
 # Office
 cask "microsoft-auto-update"
