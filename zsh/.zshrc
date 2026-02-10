@@ -24,6 +24,10 @@ EOF
 #export variables VAULT
 export VAULT_ADDR="$VAULT_URL"
 
+# --- Éditeur par défaut ---
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 #--------ALIASES -----------#
 #---------------------------#
 
@@ -67,6 +71,9 @@ alias ft="fzf --tmux"
 alias inv='nvim $(fzf --preview="bat --color=always {}")'
 alias vim="nvim"
 alias v="nvim"
+#-----Eza better ls----#
+alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias lt="ls --tree"
 
 # Merge all Brewfiles into one and install them using brew bundle
 alias bbic="find ~/.config/brew/ -iname 'Brewfile*' -not -name 'Brewfile.lock.json' -exec cat {} +> /tmp/Brewfile && brew update && brew bundle install --file /tmp/Brewfile --cleanup && brew upgrade"
@@ -124,9 +131,7 @@ eval $(thefuck --alias fk)
 
 #-----Zoxide (better cd)----
 eval "$(zoxide init zsh)"
-#-----Eza better ls----#
-alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
-alias lt="ls --tree"
+alias j="zoxide query -i" # Alias rapide pour zoxide
 
 #----ASDF----#
 #echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
