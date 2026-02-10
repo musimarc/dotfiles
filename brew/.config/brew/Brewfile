@@ -32,6 +32,10 @@ brew "podman"
 cask "podman-desktop"
 tap "common-fate/granted"
 brew "granted"
+brew "infracost"
+brew "jless"
+brew "copier"
+brew "renovate"
 
 # Some dev stuff
 brew "asdf"
@@ -87,6 +91,8 @@ cask "wezterm"
 cask "wifiman"
 brew "ollama"
 cask "nikitabobko/tap/aerospace"
+tap "sst/tap"
+brew "opencode"
 
 # Office
 cask "microsoft-auto-update"
