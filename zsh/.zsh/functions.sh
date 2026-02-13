@@ -119,15 +119,52 @@ fnote() {
         mkdir -p "$target_dir"
 
         local template_to_use="$templates_root/$type_choice.md"
+        
+        # Construire le titre selon le type de note
+        local note_title=""
+        case "$type_choice" in
+            "project")
+                note_title="[$client_name/$project_name] $new_note_base_name"
+                ;;
+            "collab")
+                note_title="[Collab] $child_choice_path - $new_note_base_name"
+                ;;
+            "daily")
+                note_title="Daily - $current_date"
+                ;;
+            "topic")
+                note_title="[Topic] $new_note_base_name"
+                ;;
+            "scratchpad")
+                note_title="[Scratchpad] $new_note_base_name"
+                ;;
+            *)
+                note_title="$new_note_base_name"
+                ;;
+        esac
+        
         if [ -f "$template_to_use" ]; then
             cp "$template_to_use" "$full_path"
-            sed -i "s/YYYY-MM-DD/$current_date/g" "$full_path"
+            sed -i '' "s|YYYY-MM-DD|$current_date|g" "$full_path"
+            sed -i '' "s|{{TITLE}}|$note_title|g" "$full_path"
             if [[ "$type_choice" == "collab" ]]; then
-                sed -i "s/\[Nom Collaborateur\]/$new_note_base_name/g" "$full_path" # Customize template
+                sed -i '' "s|\[Nom Collaborateur\]|$child_choice_path|g" "$full_path"
+            fi
+            if [[ "$type_choice" == "project" ]]; then
+                sed -i '' "s|{{CLIENT}}|$client_name|g" "$full_path"
+                sed -i '' "s|{{PROJECT}}|$project_name|g" "$full_path"
             fi
         else
-            echo "# $new_note_base_name" > "$full_path"
-            echo "Créée le $current_date." >> "$full_path"
+            echo "# $note_title" > "$full_path"
+            echo "" >> "$full_path"
+            echo "**Date**: $current_date" >> "$full_path"
+            if [[ "$type_choice" == "project" ]]; then
+                echo "**Client**: $client_name" >> "$full_path"
+                echo "**Projet**: $project_name" >> "$full_path"
+            fi
+            echo "" >> "$full_path"
+            echo "---" >> "$full_path"
+            echo "" >> "$full_path"
         fi
 
         echo "Created new note: $full_path"
