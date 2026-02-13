@@ -20,36 +20,36 @@ fnote() {
 
     local existing_notes=$(find "$notes_root" -type f -name "*.md" 2>/dev/null | sed "s|^$notes_root/||")
 
-    local selected_path_and_key=$(echo "$existing_notes" | \
-                                   fzf --ansi \
-                                       --query="$initial_query" \
-                                       --prompt="[NOTES] Open existing or type new name: " \
-                                       --preview="bat --color=always --line-range :500 $notes_root/{}" \
-                                       --preview-window 'right:50%' \
-                                       --expect=ctrl-t,ctrl-x,ctrl-v,alt-n)
+    local fzf_output=$(echo "$existing_notes" | \
+                       fzf --ansi \
+                           --query="$initial_query" \
+                           --prompt="[NOTES] Open existing or type new name: " \
+                           --preview="bat --color=always --line-range :500 $notes_root/{}" \
+                           --preview-window 'right:50%' \
+                           --print-query \
+                           --expect=ctrl-t,ctrl-x,ctrl-v,alt-n)
 
     local fzf_exit_code=$?
-    local selected_name=$(echo "$selected_path_and_key" | tail -1)
-    local key_pressed=$(echo "$selected_path_and_key" | head -1)
+    local query=$(echo "$fzf_output" | sed -n '1p')
+    local key_pressed=$(echo "$fzf_output" | sed -n '2p')
+    local selected_name=$(echo "$fzf_output" | sed -n '3p')
 
-    if [[ -z "$selected_name" && "$key_pressed" != "alt-n" ]]; then
+    # Si Escape ou aucune entrée, on sort
+    if [[ $fzf_exit_code -ne 0 && -z "$key_pressed" ]]; then
         return 1
     fi
 
     local full_path=""
 
-    if [[ -n "$selected_name" && "$key_pressed" != "alt-n" ]]; then
+    # Si un fichier existant est sélectionné
+    if [[ -n "$selected_name" && -f "$notes_root/$selected_name" ]]; then
         full_path="$notes_root/$selected_name"
     else
-        local new_note_base_name=""
-        if [[ "$key_pressed" == "alt-n" ]]; then
-            new_note_base_name=$(echo "$selected_path_and_key" | tail -1)
-        else
-            new_note_base_name="$selected_name"
-        fi
-
+        # Création d'une nouvelle note - utiliser la query comme nom
+        local new_note_base_name="$query"
+        
         if [[ -z "$new_note_base_name" ]]; then
-            read -r -p "New note name (e.g. 'my-awesome-idea'): " new_note_base_name
+            read -r "?New note name (e.g. 'my-awesome-idea'): " new_note_base_name
             if [[ -z "$new_note_base_name" ]]; then return 1; fi
         fi
 
@@ -57,15 +57,43 @@ fnote() {
         if [[ -z "$type_choice" ]]; then return 1; fi
 
         local target_dir=""
-        if [[ "$type_choice" == "project" || "$type_choice" == "collab" ]]; then
-            local parent_dir="${notes_root}/$(basename "${type_choice}s")" # /projects ou /collab
+        if [[ "$type_choice" == "project" ]]; then
+            local projects_dir="${notes_root}/projects"
+            mkdir -p "$projects_dir"
+            
+            # Étape 1 : Sélectionner ou créer un client
+            local existing_clients=$(find "$projects_dir" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | sed "s|^$projects_dir/||")
+            local client_name=$(echo "$existing_clients" | \
+                               fzf --ansi --print-query --prompt="[PROJECT] Select or type client name: " | tail -1)
+            
+            if [[ -z "$client_name" ]]; then
+                read -r "?Client name: " client_name
+                if [[ -z "$client_name" ]]; then return 1; fi
+            fi
+            
+            local client_dir="${projects_dir}/${client_name}"
+            mkdir -p "$client_dir"
+            
+            # Étape 2 : Sélectionner ou créer un projet pour ce client
+            local existing_projects=$(find "$client_dir" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | sed "s|^$client_dir/||")
+            local project_name=$(echo "$existing_projects" | \
+                                fzf --ansi --print-query --prompt="[PROJECT] Select or type project name for '$client_name': " | tail -1)
+            
+            if [[ -z "$project_name" ]]; then
+                read -r "?Project name: " project_name
+                if [[ -z "$project_name" ]]; then return 1; fi
+            fi
+            
+            target_dir="${client_dir}/${project_name}"
+        elif [[ "$type_choice" == "collab" ]]; then
+            local parent_dir="${notes_root}/collab"
             mkdir -p "$parent_dir"
-            local existing_children=$(find "$parent_dir" -maxdepth 1 -mindepth 1 -type d -printf "%P\n" 2>/dev/null)
+            local existing_children=$(find "$parent_dir" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | sed "s|^$parent_dir/||")
             local child_choice_path=$(echo "$existing_children" | \
-                                      fzf --ansi --prompt="[$(echo "$type_choice" | tr '[:lower:]' '[:upper:]')] Select existing or type new: ")
+                                      fzf --ansi --print-query --prompt="[COLLAB] Select existing or type new: " | tail -1)
 
             if [[ -z "$child_choice_path" ]]; then
-                read -r -p "New $(echo "$type_choice" | tr '[:lower:]' '[:upper:]') name (e.g., client_alpha/projet_phoenix or CollabName): " child_choice_path
+                read -r "?New collab name: " child_choice_path
                 if [[ -z "$child_choice_path" ]]; then return 1; fi
             fi
             target_dir="${parent_dir}/${child_choice_path}"
@@ -202,7 +230,7 @@ ntodo() {
 nrg() {
     local search_query="$*"
     if [ -z "$search_query" ]; then
-        read -r -p "Search in notes (ripgrep + fzf): " search_query
+        read -r "?Search in notes (ripgrep + fzf): " search_query
         if [ -z "$search_query" ]; then return 1; fi
     fi
 
