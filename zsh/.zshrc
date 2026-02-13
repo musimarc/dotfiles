@@ -2,6 +2,10 @@
 if [ -f ~/.secrets ]; then
     . ~/.secrets
 fi
+#Init notes functions system
+if [ -f ~/.zsh/functions.sh ]; then
+    . ~/.zsh/functions.sh
+fi
 
 # Create terraformrc with plugin cache directory
 cat <<EOF > ~/.terraformrc 
