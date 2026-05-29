@@ -11,6 +11,12 @@ font pango: MesloLGS Nerd Font 8, Noto Sans 8
 # Glisser les fenêtres flottantes avec Super + souris
 floating_modifier $super
 
+# --- Gaps autour des fenêtres ---
+gaps inner 10
+gaps outer 4
+# smart_borders : pas de bordure quand il n'y a qu'une seule fenêtre
+smart_borders on
+
 # --- Fond d'écran (remplace feh) ---
 output * bg ~/.wallpaper.png fill
 
