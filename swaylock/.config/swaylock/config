@@ -1,0 +1,43 @@
+# swaylock — thème Nord (style uniquement ; l'image est passée en -i sur la ligne de commande)
+scaling=fill
+color=2e3440
+
+font=MesloLGS Nerd Font
+indicator-radius=110
+indicator-thickness=10
+indicator-caps-lock
+show-failed-attempts
+
+# Anneau
+ring-color=4c566a
+ring-clear-color=ebcb8b
+ring-caps-lock-color=d08770
+ring-ver-color=88c0d0
+ring-wrong-color=bf616a
+
+# Intérieur (semi-transparent sur le fond)
+inside-color=2e3440cc
+inside-clear-color=2e3440cc
+inside-caps-lock-color=2e3440cc
+inside-ver-color=2e3440cc
+inside-wrong-color=2e3440cc
+
+# Texte central
+text-color=d8dee9
+text-clear-color=d8dee9
+text-caps-lock-color=d8dee9
+text-ver-color=88c0d0
+text-wrong-color=bf616a
+
+# Surbrillance des touches
+key-hl-color=88c0d0
+bs-hl-color=bf616a
+
+# Lignes / séparateurs épurés
+line-uses-inside
+separator-color=00000000
+
+# Indicateur de disposition clavier
+layout-bg-color=2e3440
+layout-border-color=88c0d0
+layout-text-color=d8dee9

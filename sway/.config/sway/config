@@ -49,10 +49,10 @@ exec chromium --restore-last-session --ozone-platform=wayland
 
 # --- Verrouillage + veille (remplace xss-lock + i3lock) ---
 exec swayidle -w \
-    timeout 300 'swaylock -f -i ~/.wallpaper.png -c 000000' \
+    timeout 300 'swaylock -f -i ~/.wallpaper.png' \
     timeout 600 'swaymsg "output * dpms off"' \
         resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -f -i ~/.wallpaper.png -c 000000'
+    before-sleep 'swaylock -f -i ~/.wallpaper.png'
 
 # --- Terminal ---
 bindsym $super+Return exec alacritty
@@ -79,7 +79,7 @@ bindsym $super+b       exec ~/.local/bin/bluetooth-menu  # gestion Bluetooth
 # --- Apps courantes ---
 # Capture d'écran (remplace flameshot) : sélection de zone
 bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png
-bindsym $super+l       exec swaylock -f -i ~/.wallpaper.png -c 000000
+bindsym $super+l       exec swaylock -f -i ~/.wallpaper.png
 bindsym $super+Shift+w exec chromium --ozone-platform=wayland
 bindsym $super+Shift+f exec thunar
 
