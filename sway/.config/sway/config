@@ -72,6 +72,10 @@ bindsym $super+Shift+p exec alacritty --class fzf-launcher -e ~/.local/bin/fzf-r
 # Le terminal de recherche s'ouvre en flottant et centré
 for_window [app_id="fzf-launcher"] floating enable, resize set 1100 700, move position center
 
+# --- Applets wofi ---
+bindsym $super+Shift+e exec ~/.local/bin/powermenu       # menu d'extinction
+bindsym $super+b       exec ~/.local/bin/bluetooth-menu  # gestion Bluetooth
+
 # --- Apps courantes ---
 # Capture d'écran (remplace flameshot) : sélection de zone
 bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png

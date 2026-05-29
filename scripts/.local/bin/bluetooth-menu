@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Applet Bluetooth via wofi (bluetoothctl) : (dé)connexion, scan, on/off.
+prompt="Bluetooth"
+
+powered() { bluetoothctl show | grep -q "Powered: yes"; }
+
+build_menu() {
+  if powered; then
+    echo "󰂲  Désactiver le Bluetooth"
+    echo "󰂰  Scanner les appareils (5s)"
+    bluetoothctl devices | sed 's/^Device //' | while read -r mac name; do
+      if bluetoothctl info "$mac" | grep -q "Connected: yes"; then
+        echo "󰂱  $name  ✓"
+      else
+        echo "󰂯  $name"
+      fi
+    done
+  else
+    echo "󰂯  Activer le Bluetooth"
+  fi
+}
+
+choice=$(build_menu | wofi --dmenu --prompt "$prompt" --insensitive --width 440 --height 360)
+[ -z "$choice" ] && exit 0
+
+case "$choice" in
+  *"Activer le Bluetooth"*)    bluetoothctl power on ;;
+  *"Désactiver le Bluetooth"*) bluetoothctl power off ;;
+  *"Scanner"*)
+      notify-send -i bluetooth "Bluetooth" "Recherche d'appareils…"
+      bluetoothctl --timeout 5 scan on >/dev/null 2>&1
+      exec "$0" ;;                       # relance le menu une fois le scan fini
+  *)
+      # Un appareil a été choisi : retrouver son MAC à partir du nom affiché
+      name=$(printf '%s' "$choice" | sed -E 's/^\S+[[:space:]]+//; s/[[:space:]]+✓$//')
+      mac=$(bluetoothctl devices | grep -F -- "$name" | head -1 | awk '{print $2}')
+      [ -z "$mac" ] && exit 0
+      if bluetoothctl info "$mac" | grep -q "Connected: yes"; then
+        bluetoothctl disconnect "$mac" \
+          && notify-send -i bluetooth "Bluetooth" "Déconnecté de $name"
+      else
+        if bluetoothctl connect "$mac"; then
+          notify-send -i bluetooth "Bluetooth" "Connecté à $name"
+        else
+          notify-send -u critical -i bluetooth "Bluetooth" "Échec de connexion à $name"
+        fi
+      fi ;;
+esac

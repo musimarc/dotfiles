@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Powermenu via wofi (thème Nord), avec confirmation pour les actions sensibles.
+lock="  Verrouiller"
+suspend="  Veille"
+logout="  Déconnexion"
+reboot="  Redémarrer"
+shutdown="  Éteindre"
+
+chosen=$(printf '%s\n' "$lock" "$suspend" "$logout" "$reboot" "$shutdown" \
+  | wofi --dmenu --prompt "Power" --width 280 --height 290 --insensitive)
+[ -z "$chosen" ] && exit 0
+
+confirm() {
+  printf '%s\n%s\n' "  Non" "  Oui" \
+    | wofi --dmenu --prompt "$1 ?" --width 250 --height 150 --insensitive \
+    | grep -q "Oui"
+}
+
+case "$chosen" in
+  "$lock")     swaylock -f -i ~/.wallpaper.png -c 000000 ;;
+  "$suspend")  systemctl suspend ;;
+  "$logout")   confirm "Déconnexion" && swaymsg exit ;;
+  "$reboot")   confirm "Redémarrer"  && systemctl reboot ;;
+  "$shutdown") confirm "Éteindre"    && systemctl poweroff ;;
+esac
