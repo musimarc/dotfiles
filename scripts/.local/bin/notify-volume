@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Volume + notification mako : icône selon le niveau, barre de progression,
+# et remplacement (au lieu d'empiler) grâce au tag synchronous.
+sink="@DEFAULT_AUDIO_SINK@"
+case "$1" in
+  up)   wpctl set-volume -l 1.0 "$sink" 5%+ ;;
+  down) wpctl set-volume "$sink" 5%- ;;
+  mute) wpctl set-mute "$sink" toggle ;;
+esac
+
+status=$(wpctl get-volume "$sink")            # ex: "Volume: 0.45 [MUTED]"
+vol=$(awk '{printf "%d", $2*100}' <<<"$status")
+
+if grep -q MUTED <<<"$status" || [ "$vol" -eq 0 ]; then
+  icon=audio-volume-muted;  text="Muet"
+elif [ "$vol" -lt 34 ]; then icon=audio-volume-low;    text="${vol}%"
+elif [ "$vol" -lt 67 ]; then icon=audio-volume-medium; text="${vol}%"
+else                         icon=audio-volume-high;   text="${vol}%"
+fi
+
+notify-send -a volume -i "$icon" \
+  -h "int:value:$vol" \
+  -h "string:x-canonical-private-synchronous:volume" \
+  "Volume" "$text"
