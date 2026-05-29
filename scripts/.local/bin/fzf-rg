@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Recherche DANS LE CONTENU des fichiers : ripgrep relancé en direct à chaque frappe (fzf).
+# Ouvre le fichier sélectionné à la bonne ligne dans $EDITOR.
+# Usage : fzf-rg [dossier]  (défaut : ~)
+cd "${1:-$HOME}" || exit 1
+
+RG="rg --column --line-number --no-heading --color=always --smart-case --hidden --glob !.git"
+
+selected=$(
+  : | FZF_DEFAULT_COMMAND="$RG ''" \
+  fzf --ansi --disabled --query "" \
+      --prompt "rg > " \
+      --bind "change:reload:$RG {q} || true" \
+      --delimiter : \
+      --preview 'batcat --color=always --highlight-line {2} {1} 2>/dev/null || cat {1}' \
+      --preview-window 'right:60%:+{2}/2'
+) || exit 0
+
+file=${selected%%:*}
+line=$(echo "$selected" | cut -d: -f2)
+[ -n "$file" ] && exec "${EDITOR:-vim}" +"${line:-1}" "$file"

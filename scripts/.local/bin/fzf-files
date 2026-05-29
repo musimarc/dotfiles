@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Recherche de fichier PAR NOM via fzf, avec aperçu (batcat). Ouvre dans $EDITOR.
+# Usage : fzf-files [dossier]  (défaut : ~)
+cd "${1:-$HOME}" || exit 1
+file=$(rg --files --hidden --glob '!.git' 2>/dev/null \
+        | fzf --prompt "Fichier > " \
+              --preview 'batcat --color=always --style=numbers {} 2>/dev/null || cat {}' \
+              --preview-window=right:60%) || exit 0
+[ -n "$file" ] && exec "${EDITOR:-vim}" "$file"

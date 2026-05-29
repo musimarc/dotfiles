@@ -1,0 +1,72 @@
+/* wofi — thème assorti au bureau Sway/i3 (#2f343f / accent #88c0d0) */
+
+* {
+    font-family: "MesloLGS Nerd Font", "Noto Sans", sans-serif;
+    font-size: 14px;
+}
+
+/* Fenêtre principale */
+window {
+    background-color: #2f343f;
+    border: 2px solid #88c0d0;
+    border-radius: 12px;
+    color: #d8dee8;
+}
+
+/* Champ de recherche */
+#input {
+    margin: 12px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3b4252;
+    color: #d8dee8;
+    caret-color: #88c0d0;
+}
+
+#input:focus {
+    border: none;
+    box-shadow: none;
+}
+
+/* Conteneurs */
+#outer-box {
+    margin: 4px;
+    padding: 4px;
+}
+
+#inner-box {
+    margin: 4px 12px 12px 12px;
+}
+
+#scroll {
+    margin: 0;
+}
+
+/* Entrées de la liste */
+#entry {
+    padding: 8px 12px;
+    margin: 2px 0;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+#entry:selected {
+    background-color: #88c0d0;
+    color: #2f343f;
+}
+
+#entry:selected #text {
+    color: #2f343f;
+    font-weight: bold;
+}
+
+#text {
+    color: #d8dee8;
+    margin-left: 6px;
+}
+
+/* Icônes des applications */
+#img {
+    margin-right: 8px;
+}

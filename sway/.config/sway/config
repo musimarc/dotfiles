@@ -1,0 +1,185 @@
+# ~/.config/sway/config — migré depuis ~/.config/i3/config
+# =========================================================
+
+# --- Modificateurs ---
+set $super Mod4
+set $alt Mod1
+
+# --- Police ---
+font pango: MesloLGS Nerd Font 8, Noto Sans 8
+
+# Glisser les fenêtres flottantes avec Super + souris
+floating_modifier $super
+
+# --- Fond d'écran (remplace feh) ---
+output * bg ~/.wallpaper.png fill
+
+# --- Clavier (azerty français — Wayland n'hérite pas de X11) ---
+input "type:keyboard" {
+    xkb_layout "fr"
+    xkb_variant "latin9"
+}
+
+# --- Touchpad (ajout : portable) ---
+input "type:touchpad" {
+    tap enabled
+    natural_scroll enabled
+}
+
+# --- Autostart ---
+# compton supprimé : Sway EST le compositeur
+# xsettingsd supprimé : thème GTK via gsettings sous Wayland
+# Propage l'environnement Wayland à D-Bus/systemd : indispensable pour
+# les apps snap (chromium), les portails et le partage d'écran.
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+exec mako                                              # démon de notifications (pour notify-send)
+exec alacritty -e tmux new-session -A -s main
+exec copyq
+exec nm-applet
+exec chromium --restore-last-session --ozone-platform=wayland
+
+# --- Verrouillage + veille (remplace xss-lock + i3lock) ---
+exec swayidle -w \
+    timeout 300 'swaylock -f -i ~/.wallpaper.png -c 000000' \
+    timeout 600 'swaymsg "output * dpms off"' \
+        resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -i ~/.wallpaper.png -c 000000'
+
+# --- Terminal ---
+bindsym $super+Return exec alacritty
+
+# --- Lanceur d'applications (remplace dmenu / rofi) ---
+bindsym $super+Shift+d exec wofi --show drun
+bindsym $super+space   exec wofi --show drun
+
+# --- Recherche de fichiers ---
+# Par nom via wofi (GUI)
+bindsym $super+o       exec ~/.local/bin/file-find-wofi ~
+# Par nom via fzf + aperçu (terminal flottant)
+bindsym $super+p       exec alacritty --class fzf-launcher -e ~/.local/bin/fzf-files ~
+# Dans le contenu via ripgrep live + fzf (terminal flottant)
+bindsym $super+Shift+p exec alacritty --class fzf-launcher -e ~/.local/bin/fzf-rg ~
+
+# Le terminal de recherche s'ouvre en flottant et centré
+for_window [app_id="fzf-launcher"] floating enable, resize set 1100 700, move position center
+
+# --- Apps courantes ---
+# Capture d'écran (remplace flameshot) : sélection de zone
+bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png
+bindsym $super+l       exec swaylock -f -i ~/.wallpaper.png -c 000000
+bindsym $super+Shift+w exec chromium --ozone-platform=wayland
+bindsym $super+Shift+f exec thunar
+
+# --- Volume (identique : indépendant de X11) ---
+bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ && notify-send "Volume +5%"
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && notify-send "Volume -5%"
+bindsym XF86AudioMute        exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && notify-send "Mute"
+
+# --- Luminosité (identique) ---
+bindsym XF86MonBrightnessUp   exec brightnessctl set +10% && notify-send "Luminosité $(brightnessctl g)%"
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send "Luminosité $(brightnessctl g)%"
+
+# --- Musique (identique) ---
+bindsym XF86AudioNext exec mpc next
+bindsym XF86AudioPrev exec mpc prev
+bindsym XF86AudioPlay exec mpc toggle
+bindsym XF86AudioStop exec mpc stop
+
+# --- Fermer la fenêtre ---
+bindsym $alt+c kill
+bindsym $alt+F4 kill
+
+# --- Changer le focus (identique i3) ---
+bindsym $super+Left  focus left
+bindsym $super+Down  focus down
+bindsym $super+Up    focus up
+bindsym $super+Right focus right
+
+# --- Déplacer la fenêtre (identique i3) ---
+bindsym $super+Shift+Left  move left
+bindsym $super+Shift+Down  move down
+bindsym $super+Shift+Up    move up
+bindsym $super+Shift+Right move right
+
+# --- Découpe / plein écran / layout (identique i3) ---
+bindsym $super+h split h
+bindsym $super+v split v
+bindsym $super+f fullscreen toggle
+bindsym $super+s layout toggle split
+
+# --- Espaces de travail ---
+bindsym $super+Tab workspace back_and_forth
+bindsym $super+Shift+space focus mode_toggle
+
+bindsym $alt+Control+Right workspace next
+bindsym $alt+Control+Left  workspace prev
+# AZERTY : la rangée du haut produit & é " ' ( - SANS Shift.
+# On lie donc directement ces symboles (fiable, contrairement à --to-code).
+bindsym $super+ampersand  workspace number 1
+bindsym $super+eacute     workspace number 2
+bindsym $super+quotedbl   workspace number 3
+bindsym $super+apostrophe workspace number 4
+bindsym $super+parenleft  workspace number 5
+bindsym $super+minus      workspace number 6
+
+# Déplacer : avec Shift, ces mêmes touches produisent les chiffres 1-6.
+bindsym $super+Shift+1 move container to workspace number 1
+bindsym $super+Shift+2 move container to workspace number 2
+bindsym $super+Shift+3 move container to workspace number 3
+bindsym $super+Shift+4 move container to workspace number 4
+bindsym $super+Shift+5 move container to workspace number 5
+bindsym $super+Shift+6 move container to workspace number 6
+
+# --- Recharger la config (remplace restart) ---
+bindsym $super+Shift+r reload
+
+# --- Quitter la session (i3-msg -> swaymsg) ---
+set $mode_exit   Fermer la session ?    [Y] Oui   [N] Non
+mode "$mode_exit" {
+        bindsym y       exec swaymsg exit
+        bindsym Shift+y exec swaymsg exit
+        bindsym Return  exec swaymsg exit
+        bindsym n       mode "default"
+        bindsym Shift+n mode "default"
+        bindsym Escape  mode "default"
+}
+bindsym $super+Shift+q mode "$mode_exit"
+
+# --- Redimensionner (identique i3) ---
+mode "resize" {
+        bindsym Left  resize shrink width 5 px or 5 ppt
+        bindsym Down  resize grow height 5 px or 5 ppt
+        bindsym Up    resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+        bindsym Return mode "default"
+}
+bindsym $super+r mode "resize"
+
+# --- Barre : waybar (thème Nord) à la place de swaybar/i3status ---
+bar {
+        swaybar_command waybar
+}
+
+# --- Règles de fenêtres ---
+# Wayland : app_id pour les apps natives, class= pour les apps XWayland (legacy).
+# Trouver l'app_id d'une fenêtre : swaymsg -t get_tree
+for_window [app_id=".*"] border pixel 4
+
+# Assignations aux espaces (app_id à ajuster via get_tree au besoin)
+assign [app_id="chromium"]           2
+assign [app_id="org.gnome.Nautilus"] 3
+
+# Flottant pour quelques utilitaires
+for_window [app_id="pavucontrol"]    floating enable
+for_window [app_id="org.gnome.Nautilus"] focus
+
+# Exemple de règle pour une app XWayland (ancien style class=) :
+# for_window [class="Gimp"] floating enable
+
+# --- Couleurs des bordures (identique i3) ---
+client.focused          #bf616a #2f343f #d8dee8 #bf616a #d8dee8
+client.focused_inactive #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.unfocused        #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.urgent           #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.placeholder      #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.background       #2f343f
