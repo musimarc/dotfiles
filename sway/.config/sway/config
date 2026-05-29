@@ -14,8 +14,11 @@ floating_modifier $super
 # --- Gaps autour des fenêtres ---
 gaps inner 10
 gaps outer 4
-# smart_borders : pas de bordure quand il n'y a qu'une seule fenêtre
-smart_borders on
+
+# --- Contour léger, toujours visible (même avec une seule fenêtre) ---
+default_border pixel 2
+default_floating_border pixel 2
+smart_borders off
 
 # --- Fond d'écran (remplace feh) ---
 output * bg ~/.wallpaper.png fill
@@ -169,7 +172,7 @@ bar {
 # --- Règles de fenêtres ---
 # Wayland : app_id pour les apps natives, class= pour les apps XWayland (legacy).
 # Trouver l'app_id d'une fenêtre : swaymsg -t get_tree
-for_window [app_id=".*"] border pixel 4
+# (le contour est géré par default_border ci-dessus)
 
 # Assignations aux espaces (app_id à ajuster via get_tree au besoin)
 assign [app_id="chromium"]           2
