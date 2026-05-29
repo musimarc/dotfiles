@@ -52,3 +52,22 @@ bbic
 ### Zsh
 
 The zshrc sources secrets from the `~/.secrets` file, which is not included in this repository.
+
+### Sway (Wayland, Ubuntu)
+
+Window manager setup migrated from i3 (X11) to Sway (Wayland). Packages: `sway`,
+`waybar` (Nord-themed bar), `wofi` (Nord-themed launcher), `i3` (kept for reference),
+`scripts` (file search via wofi/fzf, content search via ripgrep+fzf, in `~/.local/bin`).
+
+Required tools (Ubuntu): `sudo apt install sway swaybg swayidle swaylock waybar wofi
+mako-notifier grim slurp wl-clipboard xwayland fzf ripgrep bat`.
+
+### LightDM (system, not stow-managed)
+
+The greeter config lives under `system/` (mirrors the real `/etc` path) and is **not**
+linked by `make` (excluded in the Makefile). Install it manually:
+
+```bash
+sudo install -Dm644 ~/.wallpaper.png /usr/share/backgrounds/i3-wallpaper.png
+sudo cp system/etc/lightdm/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+```
