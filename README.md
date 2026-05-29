@@ -30,7 +30,7 @@ make
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-CTRL+S I #To install all tmux plugins
+CTRL+A I #To install all tmux plugins (prefix is C-a)
 
 ### Nvm
 
