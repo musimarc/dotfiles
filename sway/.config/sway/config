@@ -43,7 +43,9 @@ input "type:touchpad" {
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 exec mako                                              # démon de notifications (pour notify-send)
 exec alacritty -e tmux new-session -A -s main
-exec copyq
+# Presse-papier : cliphist (historique via wofi, raccourci Super+Shift+v)
+exec wl-paste --type text  --watch cliphist store
+exec wl-paste --type image --watch cliphist store
 exec nm-applet
 exec chromium --restore-last-session --ozone-platform=wayland
 
@@ -75,6 +77,7 @@ for_window [app_id="fzf-launcher"] floating enable, resize set 1100 700, move po
 # --- Applets wofi ---
 bindsym $super+Shift+e exec ~/.local/bin/powermenu       # menu d'extinction
 bindsym $super+b       exec ~/.local/bin/bluetooth-menu  # gestion Bluetooth
+bindsym $super+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy  # historique presse-papier
 
 # --- Apps courantes ---
 # Capture d'écran (remplace flameshot) : sélection de zone
