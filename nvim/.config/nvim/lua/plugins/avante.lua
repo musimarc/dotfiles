@@ -4,14 +4,17 @@ return {
 	version = false, -- Never set this value to "*"! Never!
 	opts = {
 		-- add any opts here
-		provider = "copilot",
-		-- provider = "ollama",
-		-- providers = {
-		-- 	ollama = {
-		-- 		endpoint = "http://localhost:11434",
-		-- 		model = "deepseek-r1:latest",
-		-- 	},
-		-- },
+		provider = "claude",
+		providers = {
+			claude = {
+				endpoint = "https://api.anthropic.com",
+				model = "claude-sonnet-4-6",
+				extra_request_body = {
+					temperature = 0.75,
+					max_tokens = 8192,
+				},
+			},
+		},
 	},
 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
 	build = "make",
@@ -28,7 +31,6 @@ return {
 		"stevearc/dressing.nvim", -- for input provider dressing
 		"folke/snacks.nvim", -- for input provider snacks
 		"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-		"zbirenbaum/copilot.lua", -- for providers='copilot'
 		{
 			-- support for image pasting
 			"HakonHarnes/img-clip.nvim",
