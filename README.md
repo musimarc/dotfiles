@@ -71,3 +71,21 @@ linked by `make` (excluded in the Makefile). Install it manually:
 sudo install -Dm644 ~/.wallpaper.png /usr/share/backgrounds/i3-wallpaper.png
 sudo cp system/etc/lightdm/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 ```
+
+### GTK theme (Nordic)
+
+The `gtk` package stows `~/.config/gtk-3.0/settings.ini`. Under Wayland, GTK apps read
+the theme from **gsettings** (via `xdg-desktop-portal-gtk`), not settings.ini — so use
+**`nwg-look`** (the Wayland equivalent of lxappearance; lxappearance is X11-only and has
+no effect here). Setup on a fresh machine:
+
+```bash
+# Tool + icons
+sudo apt install -y nwg-look papirus-icon-theme
+# Nordic GTK theme (not packaged) -> ~/.themes
+mkdir -p ~/.themes && curl -fL https://github.com/EliverLara/Nordic/releases/latest/download/Nordic.tar.xz | tar -xJ -C ~/.themes
+# Apply (gsettings is what the Wayland portal reads)
+gsettings set org.gnome.desktop.interface gtk-theme 'Nordic'
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+```
