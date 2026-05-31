@@ -47,6 +47,8 @@ exec alacritty -e tmux new-session -A -s main
 exec wl-paste --type text  --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec nm-applet
+# Agent polkit (mate) : élévations de privilèges en GUI (montage, GParted, enrôlement empreinte sans sudo…)
+exec /usr/libexec/polkit-mate-authentication-agent-1
 exec chromium --restore-last-session --ozone-platform=wayland
 
 # --- Verrouillage + veille (remplace xss-lock + i3lock) ---
