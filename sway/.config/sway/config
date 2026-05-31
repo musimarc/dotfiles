@@ -49,6 +49,8 @@ exec wl-paste --type image --watch cliphist store
 exec nm-applet
 # Agent polkit (mate) : élévations de privilèges en GUI (montage, GParted, enrôlement empreinte sans sudo…)
 exec /usr/libexec/polkit-mate-authentication-agent-1
+# Autorise les applis GUI lancées en root (gparted, etc.) à utiliser l'affichage XWayland
+exec xhost +SI:localuser:root
 exec chromium --restore-last-session --ozone-platform=wayland
 
 # --- Verrouillage + veille (remplace xss-lock + i3lock) ---
