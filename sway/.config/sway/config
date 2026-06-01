@@ -79,6 +79,7 @@ bindsym $super+Shift+p exec alacritty --class fzf-launcher -e ~/.local/bin/fzf-r
 
 # Le terminal de recherche s'ouvre en flottant et centré
 for_window [app_id="fzf-launcher"] floating enable, resize set 1100 700, move position center
+for_window [app_id="float-cheatsheet"] floating enable, resize set 1100 700, move position center
 
 # --- Applets wofi ---
 bindsym $super+Shift+e exec ~/.local/bin/powermenu       # menu d'extinction
@@ -91,6 +92,7 @@ bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H
 bindsym $super+l       exec swaylock -f -i ~/.wallpaper.png
 bindsym $super+Shift+w exec chromium --ozone-platform=wayland
 bindsym $super+Shift+f exec thunar
+bindsym $super+F1       exec alacritty --class float-cheatsheet -e ~/.local/bin/cheatsheet
 
 # --- Volume (notif mako : icône + barre, via script) ---
 bindsym XF86AudioRaiseVolume exec ~/.local/bin/notify-volume up
