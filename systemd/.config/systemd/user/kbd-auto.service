@@ -1,0 +1,6 @@
+[Unit]
+Description=Rétroéclairage clavier auto jour/nuit (sync night light)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/kbd-auto

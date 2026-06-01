@@ -1,0 +1,10 @@
+[Unit]
+Description=Vérifie périodiquement la batterie de la souris MX Master
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=20min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Mode VOYAGE : autorise la pleine capacité (charge jusqu'à 100%).
+# Revenir au défaut 90% : `sudo tlp start`.
+sudo tlp setcharge 75 100 BAT0 \
+  && notify-send -t 3000 -i battery-full-charging "🔋 Batterie — voyage" "Charge complète autorisée (100 %)."

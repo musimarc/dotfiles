@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Mode CONSERVATION : plafonne la charge à 80% (idéal posé au bureau / branché en continu).
+# Revenir au défaut 90% : `sudo tlp start`.
+sudo tlp setcharge 75 80 BAT0 \
+  && notify-send -t 3000 -i battery-good "🔋 Batterie — conservation" "Charge plafonnée à 80 %."

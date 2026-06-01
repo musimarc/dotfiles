@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Mode de charge batterie cliquable pour waybar : cycle 80% -> 90% -> 100%.
+# N'écrit que le seuil de FIN (déjà autorisé via udev) ; le seuil de DÉBUT est
+# fixé à 75 par TLP, donc 80/90/100 sont toutes valides (start < end).
+EF=/sys/class/power_supply/BAT0/charge_control_end_threshold
+cur=$(cat "$EF" 2>/dev/null)
+
+case "${1:-status}" in
+  cycle)
+        case "$cur" in
+          80)  new=90  ; msg="Défaut (90 %)" ;;
+          90)  new=100 ; msg="Voyage (100 %)" ;;
+          100) new=80  ; msg="Conservation (80 %)" ;;
+          *)   new=90  ; msg="Défaut (90 %)" ;;
+        esac
+        if echo "$new" > "$EF" 2>/dev/null; then
+          notify-send -t 2500 -i battery "🔋 Charge batterie" "$msg"
+        else
+          notify-send -t 3000 -i dialog-error "🔋 Charge batterie" "Écriture refusée. Lance : sudo tlp start"
+        fi
+        pkill -RTMIN+9 waybar 2>/dev/null ;;
+  status)
+        case "$cur" in
+          80)  printf '{"text":"󰂏 80%%","class":"save","tooltip":"Conservation — charge plafonnée à 80%%. Clic pour changer."}\n' ;;
+          90)  printf '{"text":"󰂏 90%%","class":"default","tooltip":"Défaut — charge plafonnée à 90%%. Clic pour changer."}\n' ;;
+          100) printf '{"text":"󰂏 100%%","class":"travel","tooltip":"Voyage — charge jusqu'\''à 100%%. Clic pour changer."}\n' ;;
+          *)   printf '{"text":"󰂏 %s%%","class":"default","tooltip":"Seuil de charge : %s%%. Clic pour changer."}\n' "$cur" "$cur" ;;
+        esac ;;
+esac

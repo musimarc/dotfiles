@@ -1,0 +1,10 @@
+[Unit]
+Description=Vérifie le jour/nuit pour le rétroéclairage clavier
+
+[Timer]
+OnBootSec=20s
+OnUnitActiveSec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

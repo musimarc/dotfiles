@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Night light via wlsunset : auto selon l'heure (chaud le soir), avec interrupteur.
+#  - autostart Sway : "nightlight on"
+#  - raccourci $super+Shift+n et clic waybar : "nightlight toggle"
+#  - module waybar : "nightlight status" (sortie JSON)
+#
+# ⚙️  Ajuste LAT/LON à ta ville (par défaut : Le Crès, Hérault).
+LAT="43.65"      # latitude  (Le Crès, Hérault)
+LON="3.93"       # longitude (Le Crès, Hérault)
+DAY=6500         # température de jour (K, neutre)
+NIGHT=3800       # température de nuit (K, chaud)
+
+CMD=(wlsunset -l "$LAT" -L "$LON" -t "$NIGHT" -T "$DAY")
+ICON_ON="󰖔"      # lune  (night light actif)
+ICON_OFF="󰖙"     # soleil (désactivé)
+
+refresh() { pkill -RTMIN+8 waybar 2>/dev/null || true; }   # rafraîchit l'icône waybar (signal=8)
+start()   { pgrep -x wlsunset >/dev/null || { "${CMD[@]}" >/dev/null 2>&1 & disown; }; }
+stop()    { pkill -x wlsunset; }   # wlsunset rétablit le gamma normal en quittant
+
+case "${1:-toggle}" in
+  on)   start; refresh ;;
+  off)  stop;  refresh ;;
+  toggle)
+        if pgrep -x wlsunset >/dev/null; then
+          stop;  notify-send -t 2500 -i weather-clear       "🌙 Night light" "Désactivé"
+        else
+          start; notify-send -t 2500 -i weather-clear-night "🌙 Night light" "Activé (auto selon l'heure)"
+        fi
+        refresh ;;
+  status)
+        if pgrep -x wlsunset >/dev/null; then
+          printf '{"text":"%s","class":"on","tooltip":"Night light : activé (auto)"}\n'  "$ICON_ON"
+        else
+          printf '{"text":"%s","class":"off","tooltip":"Night light : désactivé"}\n'     "$ICON_OFF"
+        fi ;;
+  *) echo "usage: nightlight {on|off|toggle|status}" >&2; exit 1 ;;
+esac

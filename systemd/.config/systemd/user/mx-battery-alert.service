@@ -1,0 +1,6 @@
+[Unit]
+Description=Alerte batterie faible souris MX Master
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/mx-battery-alert.sh
