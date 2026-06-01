@@ -6,7 +6,7 @@
 
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
-    "modules-right": ["pulseaudio", "backlight", "network", "battery", "tray", "clock"],
+    "modules-right": ["pulseaudio", "backlight", "network", "battery", "tray", "clock", "custom/nightlight", "custom/battmode"],
 
     "sway/workspaces": {
         "disable-scroll": false,
@@ -46,6 +46,22 @@
     "backlight": {
         "format": "{icon} {percent}%",
         "format-icons": ["󰃞", "󰃟", "󰃠"]
+    },
+    "custom/nightlight": {
+        "exec": "/home/marc/.local/bin/nightlight status",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "on-click": "/home/marc/.local/bin/nightlight toggle",
+        "tooltip": true
+    },
+    "custom/battmode": {
+        "exec": "/home/marc/.local/bin/battmode status",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 9,
+        "on-click": "/home/marc/.local/bin/battmode cycle",
+        "tooltip": true
     },
     "tray": {
         "icon-size": 18,

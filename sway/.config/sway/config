@@ -52,6 +52,8 @@ exec /usr/libexec/polkit-mate-authentication-agent-1
 # Autorise les applis GUI lancées en root (gparted, etc.) à utiliser l'affichage XWayland
 exec xhost +SI:localuser:root
 exec chromium --restore-last-session --ozone-platform=wayland
+exec ~/.local/bin/nightlight on                        # night light auto (wlsunset) — bascule via $super+Shift+n
+exec ~/.local/bin/kbd-auto force                       # rétroéclairage clavier auto jour/nuit (sync night light)
 
 # --- Verrouillage + veille (remplace xss-lock + i3lock) ---
 exec swayidle -w \
@@ -82,7 +84,7 @@ for_window [app_id="fzf-launcher"] floating enable, resize set 1100 700, move po
 bindsym $super+Shift+e exec ~/.local/bin/powermenu       # menu d'extinction
 bindsym $super+b       exec ~/.local/bin/bluetooth-menu  # gestion Bluetooth
 bindsym $super+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy  # historique presse-papier
-
+bindsym $super+Shift+n exec ~/.local/bin/nightlight toggle  # night light : activer/désactiver
 # --- Apps courantes ---
 # Capture d'écran (remplace flameshot) : sélection de zone
 bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png

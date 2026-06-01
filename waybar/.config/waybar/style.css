@@ -38,9 +38,11 @@ window#waybar {
 #mode,
 #clock,
 #battery,
+#custom-battmode,
 #network,
 #pulseaudio,
 #backlight,
+#custom-nightlight,
 #tray {
     padding: 0 12px;
     margin: 4px 2px;
@@ -67,6 +69,13 @@ window#waybar {
 #battery.charging { color: #a3be8c; }   /* Nord aurora green */
 
 #network.disconnected { color: #bf616a; }
+
+/* Night light : lune chaude quand actif */
+#custom-nightlight.on { color: #ebcb8b; }
+
+/* Modes de charge batterie */
+#custom-battmode.save   { color: #ebcb8b; }   /* conservation 80% = jaune */
+#custom-battmode.travel { color: #a3be8c; }   /* voyage 100% = vert */
 
 #window {
     color: #81a1c1;
