@@ -89,3 +89,33 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Nordic'
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 ```
+
+### Scripts & systemd timers (automation)
+
+The `scripts` package (`~/.local/bin`) holds the automation helpers: `nightlight`
+(wlsunset day/night + waybar toggle), `kbd-auto` (keyboard backlight by daylight),
+`battmode` / `batt-save` / `batt-travel` (battery charge thresholds via TLP),
+`mx-battery-alert.sh` (low-battery popup). The `systemd` package provides their
+user timers/services (`kbd-auto`, `mx-battery-alert`).
+
+**Reinstall notes (two gotchas):**
+
+1. **Stow these packages with `--no-folding`.** Plain `stow` tries to *fold*
+   `~/.local` or `~/.config` into a single symlink (replacing the whole
+   directory). Force per-file links instead:
+
+   ```bash
+   stow --no-folding scripts systemd
+   ```
+
+2. **Enable the timers manually — it is machine state, not in the repo.** The
+   units are *linked* (the unit file is a symlink outside the standard dir), so
+   enablement only lives on the machine:
+
+   ```bash
+   systemctl --user daemon-reload
+   systemctl --user enable --now kbd-auto.timer mx-battery-alert.timer
+   ```
+
+   ⚠️ Never `disable`/`reenable` these *linked* units — `disable` removes the
+   symlink itself. Use `enable` only.
