@@ -3,8 +3,8 @@
 #   - "vpn-toggle"        : bascule on/off
 #   - "vpn-toggle status" : sortie JSON pour waybar
 VPN="p1"
-ICON_ON="󰦝"    # verrou fermé (vpn actif)
-ICON_OFF="󰦞"   # verrou ouvert (vpn inactif)
+ICON_ON="󰌾"    # verrou fermé (vpn actif)
+ICON_OFF="󰍁"   # verrou ouvert (vpn inactif)
 
 is_active() { nmcli -t -f NAME connection show --active 2>/dev/null | grep -qx "$VPN"; }
 
