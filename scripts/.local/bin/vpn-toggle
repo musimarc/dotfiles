@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Bascule la connexion WireGuard p1 via NetworkManager.
+# Bascule la connexion WireGuard maison via NetworkManager.
 #   - "vpn-toggle"        : bascule on/off
 #   - "vpn-toggle status" : sortie JSON pour waybar
-VPN="p1"
+VPN="maison"
 ICON_ON="󰖂 VPN"    # nf-md-vpn actif
 ICON_OFF="󰖂 VPN"  # nf-md-vpn inactif
 
@@ -12,15 +12,15 @@ case "${1:-toggle}" in
   toggle)
         if is_active; then
           nmcli connection down "$VPN" >/dev/null 2>&1 \
-            && notify-send -t 2500 -i network-vpn-disconnected "󰦞 VPN" "Déconnecté (p1)"
+            && notify-send -t 2500 -i network-vpn-disconnected "󰦞 VPN" "Déconnecté ($VPN)"
         else
           nmcli connection up "$VPN" >/dev/null 2>&1 \
-            && notify-send -t 2500 -i network-vpn "󰦝 VPN" "Connecté (p1 — 10.0.0.2)"
+            && notify-send -t 2500 -i network-vpn "󰦝 VPN" "Connecté ($VPN — 10.0.0.2)"
         fi
         pkill -RTMIN+10 waybar 2>/dev/null ;;
   status)
         if is_active; then
-          ip=$(ip -4 addr show p1 2>/dev/null | awk '/inet /{split($2,a,"/"); print a[1]}')
+          ip=$(ip -4 addr show "$VPN" 2>/dev/null | awk '/inet /{split($2,a,"/"); print a[1]}')
           printf '{"text":"%s","class":"on","tooltip":"VPN actif — %s"}\n' "$ICON_ON" "${ip:-10.0.0.x}"
         else
           printf '{"text":"%s","class":"off","tooltip":"VPN inactif"}\n' "$ICON_OFF"
