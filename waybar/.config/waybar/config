@@ -6,7 +6,7 @@
 
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
-    "modules-right": ["pulseaudio", "backlight", "network", "battery", "tray", "clock", "custom/nightlight", "custom/battmode"],
+    "modules-right": ["pulseaudio", "backlight", "network", "custom/vpn", "battery", "tray", "clock", "custom/nightlight", "custom/battmode"],
 
     "sway/workspaces": {
         "disable-scroll": false,
@@ -53,6 +53,14 @@
         "interval": "once",
         "signal": 8,
         "on-click": "/home/marc/.local/bin/nightlight toggle",
+        "tooltip": true
+    },
+    "custom/vpn": {
+        "exec": "/home/marc/.local/bin/vpn-toggle status",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 10,
+        "on-click": "/home/marc/.local/bin/vpn-toggle",
         "tooltip": true
     },
     "custom/battmode": {

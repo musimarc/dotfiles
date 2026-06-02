@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Bascule la connexion WireGuard p1 via NetworkManager.
+#   - "vpn-toggle"        : bascule on/off
+#   - "vpn-toggle status" : sortie JSON pour waybar
+VPN="p1"
+ICON_ON="󰦝"    # verrou fermé (vpn actif)
+ICON_OFF="󰦞"   # verrou ouvert (vpn inactif)
+
+is_active() { nmcli -t -f NAME connection show --active 2>/dev/null | grep -qx "$VPN"; }
+
+case "${1:-toggle}" in
+  toggle)
+        if is_active; then
+          nmcli connection down "$VPN" >/dev/null 2>&1 \
+            && notify-send -t 2500 -i network-vpn-disconnected "󰦞 VPN" "Déconnecté (p1)"
+        else
+          nmcli connection up "$VPN" >/dev/null 2>&1 \
+            && notify-send -t 2500 -i network-vpn "󰦝 VPN" "Connecté (p1 — 10.0.0.2)"
+        fi
+        pkill -RTMIN+10 waybar 2>/dev/null ;;
+  status)
+        if is_active; then
+          printf '{"text":"%s","class":"on","tooltip":"VPN actif — 10.0.0.2\nClic pour déconnecter"}\n' "$ICON_ON"
+        else
+          printf '{"text":"%s","class":"off","tooltip":"VPN inactif\nClic pour connecter"}\n' "$ICON_OFF"
+        fi ;;
+esac

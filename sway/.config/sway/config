@@ -86,6 +86,7 @@ bindsym $super+Shift+e exec ~/.local/bin/powermenu       # menu d'extinction
 bindsym $super+b       exec ~/.local/bin/bluetooth-menu  # gestion Bluetooth
 bindsym $super+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy  # historique presse-papier
 bindsym $super+Shift+n exec ~/.local/bin/nightlight toggle  # night light : activer/désactiver
+bindsym $super+Shift+g exec ~/.local/bin/vpn-toggle        # VPN WireGuard p1 : connecter/déconnecter
 # --- Apps courantes ---
 # Capture d'écran (remplace flameshot) : sélection de zone
 bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png
