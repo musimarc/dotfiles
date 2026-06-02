@@ -3,8 +3,8 @@
 #   - "vpn-toggle"        : bascule on/off
 #   - "vpn-toggle status" : sortie JSON pour waybar
 VPN="p1"
-ICON_ON="󰌾"    # verrou fermé (vpn actif)
-ICON_OFF="󰍁"   # verrou ouvert (vpn inactif)
+ICON_ON="󰖂 VPN"    # nf-md-vpn actif
+ICON_OFF="󰖂 VPN"  # nf-md-vpn inactif
 
 is_active() { nmcli -t -f NAME connection show --active 2>/dev/null | grep -qx "$VPN"; }
 
@@ -20,8 +20,8 @@ case "${1:-toggle}" in
         pkill -RTMIN+10 waybar 2>/dev/null ;;
   status)
         if is_active; then
-          printf '{"text":"%s","class":"on","tooltip":"VPN actif — 10.0.0.2\nClic pour déconnecter"}\n' "$ICON_ON"
+          printf '{"text":"%s","class":"on","tooltip":"VPN actif — 10.0.0.2"}\n' "$ICON_ON"
         else
-          printf '{"text":"%s","class":"off","tooltip":"VPN inactif\nClic pour connecter"}\n' "$ICON_OFF"
+          printf '{"text":"%s","class":"off","tooltip":"VPN inactif"}\n' "$ICON_OFF"
         fi ;;
 esac

@@ -6,7 +6,7 @@
 
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
-    "modules-right": ["pulseaudio", "backlight", "network", "custom/vpn", "battery", "tray", "clock", "custom/nightlight", "custom/battmode"],
+    "modules-right": ["pulseaudio", "backlight", "network", "battery", "tray", "clock", "custom/vpn", "custom/nightlight", "custom/battmode"],
 
     "sway/workspaces": {
         "disable-scroll": false,
