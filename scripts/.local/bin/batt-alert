@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Alerte batterie faible à 20% (mako notification).
+# Tourne en fond, boucle toutes les 60s.
+THRESHOLD=20
+BAT="/sys/class/power_supply/BAT0"
+
+while true; do
+  cap=$(cat "$BAT/capacity")
+  status=$(cat "$BAT/status")
+  if [ "$cap" -le "$THRESHOLD" ] && [ "$status" = "Discharging" ]; then
+    notify-send -u critical "Batterie faible" "${cap}% restant — branche le chargeur"
+  fi
+  sleep 60
+done

@@ -54,6 +54,8 @@ exec xhost +SI:localuser:root
 exec chromium --restore-last-session --ozone-platform=wayland
 exec ~/.local/bin/nightlight on                        # night light auto (wlsunset) — bascule via $super+Shift+n
 exec ~/.local/bin/kbd-auto force                       # rétroéclairage clavier auto jour/nuit (sync night light)
+exec ~/.local/bin/batt-alert                           # alerte batterie faible 20% (mako)
+exec synology-drive start                              # synchronisation Synology Drive
 
 # --- Verrouillage + veille (remplace xss-lock + i3lock) ---
 exec swayidle -w \
@@ -92,6 +94,8 @@ bindsym $super+Shift+g exec ~/.local/bin/vpn-toggle        # VPN WireGuard maiso
 bindsym Print          exec grim -g "$(slurp)" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png
 bindsym $super+l       exec swaylock -f -i ~/.wallpaper.png
 bindsym $super+Shift+w exec chromium --ozone-platform=wayland
+bindsym $super+Shift+c exec chromium --app=https://calendar.google.com
+bindsym $super+Shift+m exec chromium --app=https://mail.google.com
 bindsym $super+Shift+f exec thunar
 bindsym $super+F1       exec alacritty --class float-cheatsheet -e ~/.local/bin/cheatsheet
 
@@ -197,6 +201,14 @@ assign [app_id="org.gnome.Nautilus"] 3
 # Flottant pour quelques utilitaires
 for_window [app_id="pavucontrol"]    floating enable
 for_window [app_id="org.gnome.Nautilus"] focus
+
+# Calendar Google sur workspace 6 avec indication urgente (rouge dans waybar)
+for_window [app_id="chrome-calendar.google.com__-Default"] move container to workspace 6
+for_window [app_id="chrome-calendar.google.com__-Default"] urgent enable
+
+# Gmail sur workspace 3 avec indication urgente
+for_window [app_id="chrome-mail.google.com__-Default"] move container to workspace 3
+for_window [app_id="chrome-mail.google.com__-Default"] urgent enable
 
 # Exemple de règle pour une app XWayland (ancien style class=) :
 # for_window [class="Gimp"] floating enable

@@ -89,10 +89,19 @@
 | `$super+Shift+p` | Chercher contenu (rg+fzf) |
 | `$super+Shift+v` | Presse-papier (cliphist) |
 | `$super+Shift+w` | Chromium |
+| `$super+Shift+c` | Google Calendar (workspace 6) |
+| `$super+Shift+m` | Gmail (workspace 3) |
 | `$super+Shift+f` | Thunar |
 | `$super+Shift+n` | Night light toggle |
 | `$super+Shift+e` | Menu extinction |
 | `Print` | Capture d'écran |
+
+### Hardware — Batterie
+
+| Rappel | Action |
+|---|---|
+| `batt-alert` | Notification mako critique si batterie ≤ 20% (auto au login) |
+| `$super+clic waybar battmode` | Cycle seuils 80% → 90% → 100% |
 
 ### Multimédia
 
