@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>1778769800170394-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>image-x-generic</icon>
+	<name>Aperçu rapide</name>
+	<submenu></submenu>
+	<unique-id>1778769800170394-2</unique-id>
+	<command>~/.local/bin/quicklook %f</command>
+	<description>Aperçu de la photo sélectionnée (RAW inclus)</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<image-files/>
+</action>
+<action>
+	<icon>image-x-generic</icon>
+	<name>Exporter JPEG auto</name>
+	<submenu></submenu>
+	<unique-id>1778769800170394-3</unique-id>
+	<command>~/.local/bin/raw-export-auto %F</command>
+	<description>Développer chaque RAW avec Auto Levels et exporter en JPEG</description>
+	<range></range>
+	<patterns>*.arw;*.ARW;*.cr2;*.CR2;*.cr3;*.CR3;*.dng;*.DNG;*.nef;*.NEF;*.nrw;*.NRW;*.orf;*.ORF;*.pef;*.PEF;*.raf;*.RAF;*.raw;*.RAW;*.rw2;*.RW2;*.srw;*.SRW;*.3fr;*.3FR;*.iiq;*.IIQ;*.erf;*.ERF;*.kdc;*.KDC;*.dcr;*.DCR;*.mos;*.MOS;*.mrw;*.MRW;*.rwl;*.RWL;*.x3f;*.X3F</patterns>
+	<startup-notify/>
+	<image-files/>
+</action>
+</actions>

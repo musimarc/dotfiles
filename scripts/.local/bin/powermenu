@@ -2,12 +2,13 @@
 # Powermenu via wofi (thème Nord), avec confirmation pour les actions sensibles.
 lock="  Verrouiller"
 suspend="  Veille"
+hibernate="  Hiberner"
 logout="  Déconnexion"
 reboot="  Redémarrer"
 shutdown="  Éteindre"
 
-chosen=$(printf '%s\n' "$lock" "$suspend" "$logout" "$reboot" "$shutdown" \
-  | wofi --dmenu --prompt "Power" --width 280 --height 290 --insensitive)
+chosen=$(printf '%s\n' "$lock" "$suspend" "$hibernate" "$logout" "$reboot" "$shutdown" \
+  | wofi --dmenu --prompt "Power" --width 280 --height 330 --insensitive)
 [ -z "$chosen" ] && exit 0
 
 confirm() {
@@ -19,6 +20,7 @@ confirm() {
 case "$chosen" in
   "$lock")     swaylock -f -i ~/.wallpaper.png -c 000000 ;;
   "$suspend")  systemctl suspend ;;
+  "$hibernate") systemctl hibernate ;;
   "$logout")   confirm "Déconnexion" && swaymsg exit ;;
   "$reboot")   confirm "Redémarrer"  && systemctl reboot ;;
   "$shutdown") confirm "Éteindre"    && systemctl poweroff ;;

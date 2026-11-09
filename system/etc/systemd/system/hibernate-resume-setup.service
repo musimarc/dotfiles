@@ -1,0 +1,13 @@
+[Unit]
+Description=Configure hibernation resume device for swapfile
+DefaultDependencies=no
+After=local-fs.target
+Before=systemd-hibernate.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'printf 259:4 > /sys/power/resume; printf 77824 > /sys/power/resume_offset'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

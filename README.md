@@ -72,6 +72,29 @@ sudo install -Dm644 ~/.wallpaper.png /usr/share/backgrounds/i3-wallpaper.png
 sudo cp system/etc/lightdm/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 ```
 
+### Hibernation (system, matériel spécifique)
+
+Les réglages systemd et GRUB du ThinkPad sont conservés sous `system/etc/` et ne sont
+pas gérés par Stow. Ils utilisent l’UUID du système de fichiers de swap et son offset
+physique ; après recréation de `/swap.img`, recalculer l’offset avec `filefrag -v` et
+mettre à jour les deux fichiers qui le référencent. Ces valeurs identifient cette
+machine, mais ne sont pas des identifiants d’accès.
+
+Installation manuelle sur cette machine :
+
+```bash
+sudo install -Dm644 system/etc/systemd/logind.conf.d/suspend-only.conf /etc/systemd/logind.conf.d/suspend-only.conf
+sudo install -Dm644 system/etc/systemd/sleep.conf.d/hibernate-shutdown.conf /etc/systemd/sleep.conf.d/hibernate-shutdown.conf
+sudo install -Dm644 system/etc/systemd/system/hibernate-resume-setup.service /etc/systemd/system/hibernate-resume-setup.service
+sudo install -Dm644 system/etc/default/grub.d/99-hibernate-resume.cfg /etc/default/grub.d/99-hibernate-resume.cfg
+sudo systemctl enable hibernate-resume-setup.service
+sudo update-grub
+sudo update-initramfs -u -k all
+```
+
+Ne pas redémarrer `systemd-logind` depuis une session graphique ; les changements
+`SleepOperation` sont pris en compte au prochain démarrage.
+
 ### GTK theme (Nordic)
 
 The `gtk` package stows `~/.config/gtk-3.0/settings.ini`. Under Wayland, GTK apps read
@@ -89,6 +112,36 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Nordic'
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 ```
+
+### Photos : aperçu rapide et fichiers RAW
+
+Le raccourci `$super+Shift+f` conserve **Thunar**. Sélectionner une photo puis appuyer
+sur **Espace** ouvre **Swayimg** en surimpression flottante, sans liste ni infos EXIF.
+Les flèches **↑ / ↓** passent à la photo précédente/suivante du dossier. **Suppr**
+déplace la photo vers la corbeille et passe à la suivante. **Échap** ferme l’aperçu
+et sélectionne la dernière photo dans l’onglet Thunar déjà ouvert. Les actions sont
+implémentées en Lua pour garder le chemin comme donnée et l’échapper avant tout appel
+shell, sans interpolation du chemin dans une commande `exec` de Swayimg.
+Swayimg s'appuie sur LibRaw pour les fichiers RAW. Cela évite
+Nautilus, Sushi et les composants de session GNOME.
+
+Le menu contextuel des RAW propose aussi **Exporter JPEG auto**. Cette action utilise
+RawTherapee en ligne de commande, applique Auto Levels à chaque photo et écrit les
+JPEG dans un sous-dossier `JPEG-auto/` sans modifier les RAW.
+
+```bash
+sudo apt install --no-install-recommends wtype
+sudo apt install --no-install-recommends rawtherapee
+stow --no-folding --restow scripts thunar
+```
+
+Cette configuration requiert **Swayimg 5.5 ou plus** pour ses API Lua. Le paquet
+Ubuntu 26.04 fournit Swayimg 4.7, qui n’est pas compatible ; installer une version
+récente depuis la source officielle (actuellement v5.7) avant d’utiliser l’aperçu.
+Le script vérifie la version et refuse de lancer l’ancienne version.
+
+Swayimg et LibRaw n’exigent pas GDM, GNOME Shell ni les composants de session GNOME.
+Geeqie reste disponible pour parcourir les images manuellement.
 
 ### Scripts & systemd timers (automation)
 

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if (($# == 0)); then
+	echo "Usage: raw-export-auto FILE..." >&2
+	exit 2
+fi
+
+if ! command -v rawtherapee-cli >/dev/null 2>&1; then
+	notify-send "Export JPEG auto" "Installe d'abord le paquet rawtherapee."
+	exit 127
+fi
+
+profile=$(mktemp --suffix=.pp3)
+trap 'rm -f "$profile"' EXIT
+printf '[Exposure]\nAuto=true\n' > "$profile"
+
+source_directory=$(dirname -- "$1")
+output_directory="$source_directory/JPEG-auto"
+mkdir -p "$output_directory"
+
+if rawtherapee-cli -q -d -p "$profile" -j92 -o "$output_directory" -c "$@"; then
+	notify-send "Export JPEG auto terminé" "$# photo(s) exportée(s) dans $output_directory"
+else
+	notify-send --urgency=critical "Échec de l'export JPEG auto" "RawTherapee n'a pas pu traiter la sélection."
+	exit 1
+fi

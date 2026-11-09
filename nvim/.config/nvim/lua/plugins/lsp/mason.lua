@@ -25,7 +25,7 @@ return {
 				"html",
 				--"css-lsp",
 				"tailwindcss",
-				"gopls",
+				-- "gopls",
 				"templ",
 				--"htmx-lsp",
 				"astro",
@@ -33,14 +33,14 @@ return {
 				"graphql",
 				"emmet_ls",
 				"terraformls",
-				"vuels",
+				-- "vuels", -- use vetur instead
 				"marksman",
 				"prismals",
 				"helm_ls",
 				"jsonls",
-				"autotools_ls",
+				-- "autotools_ls",
 				"taplo",
-				"dockerls",
+				-- "dockerls",
 			},
 			automatic_installation = true,
 		})
@@ -51,10 +51,10 @@ return {
 				"eslint",
 				"tflint",
 				"tfsec",
-				"mdformat",
-				"pylint",
-				"isort", -- python formatter
-				"black", -- python formatter
+				-- "mdformat",
+				-- "pylint",
+				-- "isort", -- python formatter
+				-- "black", -- python formatter
 			},
 		})
 	end,

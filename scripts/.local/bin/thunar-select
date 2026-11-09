@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+window_id=${1:?Usage: thunar-select THUNAR_WINDOW_ID FILE}
+file=${2:?Usage: thunar-select THUNAR_WINDOW_ID FILE}
+filename=$(basename -- "$file")
+
+# Return to the original Thunar window and use its built-in pattern selector,
+# which changes the selection in the current tab instead of opening a tab/window.
+swaymsg "[con_id=$window_id] focus" >/dev/null
+sleep 0.15
+wtype -M ctrl -k s -m ctrl
+sleep 0.15
+wtype -M ctrl -k a -m ctrl
+wtype -d 5 -- "$filename"
+wtype -k Return
+sleep 0.15
+swaymsg "[con_id=$window_id] focus" >/dev/null

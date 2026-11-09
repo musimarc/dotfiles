@@ -34,6 +34,7 @@
 | `$super+'` | Workspace 4 |
 | `$super+(` | Workspace 5 |
 | `$super+-` | Workspace 6 |
+| `$super+Shift+{1-6}` | Déplacer vers le workspace 1-6 (touches physiques AZERTY) |
 
 ---
 
@@ -77,7 +78,7 @@
 
 | Touche | Action |
 |---|---|
-| `$super+Shift+{1-6}` | Déplacer vers workspace N |
+| `$super+Shift+{1-6}` | Déplacer vers workspace 1-6 (touches physiques AZERTY) |
 
 ### Apps
 
@@ -91,7 +92,7 @@
 | `$super+Shift+w` | Chromium |
 | `$super+Shift+c` | Google Calendar (workspace 6) |
 | `$super+Shift+m` | Gmail (workspace 3) |
-| `$super+Shift+f` | Thunar |
+| `$super+Shift+f` | Thunar (Espace : aperçu de la photo sélectionnée) |
 | `$super+Shift+n` | Night light toggle |
 | `$super+Shift+e` | Menu extinction |
 | `Print` | Capture d'écran |
