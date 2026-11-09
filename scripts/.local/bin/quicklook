@@ -2,6 +2,19 @@
 set -euo pipefail
 
 file=${1:?Usage: quicklook FILE}
+swayimg_bin=${SWAYIMG_BIN:-}
+
+if [[ -z $swayimg_bin && -x $HOME/.local/opt/swayimg/5.7/bin/swayimg ]]; then
+	swayimg_bin=$HOME/.local/opt/swayimg/5.7/bin/swayimg
+fi
+if [[ -z $swayimg_bin ]]; then
+	swayimg_bin=$(command -v swayimg || true)
+fi
+if [[ -z $swayimg_bin ]]; then
+	notify-send --urgency=critical "Aperçu photo" "Swayimg est introuvable."
+	exit 1
+fi
+
 thunar_con_id=$(swaymsg -t get_tree | python3 -c '
 import json, sys
 
@@ -17,7 +30,7 @@ tree = json.load(sys.stdin)
 print(find_focused_thunar(tree) or "")
 ')
 
-version=$(swayimg --version 2>/dev/null | sed -nE 's/^swayimg version ([0-9]+)\.([0-9]+).*/\1 \2/p')
+version=$("$swayimg_bin" --version 2>/dev/null | sed -nE 's/^swayimg version ([0-9]+)\.([0-9]+).*/\1 \2/p')
 if [[ -z $version ]]; then
 	notify-send --urgency=critical "Aperçu photo" "Version de Swayimg illisible. Swayimg 5.5 ou plus est requis."
 	exit 1
@@ -33,4 +46,4 @@ if [[ ! $thunar_con_id =~ ^[0-9]+$ ]]; then
 fi
 
 export QUICKLOOK_THUNAR_CON_ID=$thunar_con_id
-exec swayimg --config="$HOME/.local/share/swayimg/quicklook.lua" "$file"
+exec "$swayimg_bin" --config="$HOME/.local/share/swayimg/quicklook.lua" "$file"

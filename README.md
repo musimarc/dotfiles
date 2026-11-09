@@ -136,9 +136,35 @@ stow --no-folding --restow scripts thunar
 ```
 
 Cette configuration requiert **Swayimg 5.5 ou plus** pour ses API Lua. Le paquet
-Ubuntu 26.04 fournit Swayimg 4.7, qui n’est pas compatible ; installer une version
-récente depuis la source officielle (actuellement v5.7) avant d’utiliser l’aperçu.
-Le script vérifie la version et refuse de lancer l’ancienne version.
+Ubuntu 26.04 fournit Swayimg 4.7, qui n’est pas compatible. Swayimg v5.7 est construit
+depuis le tag officiel et installé séparément dans `~/.local/opt/swayimg/5.7` ; le
+paquet APT 4.7 reste intact. `quicklook` privilégie cette copie isolée et vérifie sa
+version avant de l’exécuter.
+
+Dépendances minimales de compilation (les compilateurs et `pkg-config` sont déjà
+présents sur le T14) :
+
+```bash
+sudo apt install --no-install-recommends meson ninja-build \
+  libxkbcommon-dev libfontconfig1-dev libfreetype-dev libluajit-5.1-dev \
+  libwayland-dev wayland-protocols libraw-dev libjpeg-dev
+```
+
+Compilation reproductible depuis le tag v5.7 (`b20790cba854a520d88ca7b8d82022fae3c6b447`) :
+
+```bash
+git clone --depth 1 --branch v5.7 https://github.com/artemsen/swayimg.git ~/src/swayimg-v5.7
+cd ~/src/swayimg-v5.7
+meson setup build --prefix="$HOME/.local/opt/swayimg/5.7" \
+  -Dversion=5.7 -Dliblua=luajit -Djpeg=enabled -Draw=enabled \
+  -Dwayland=enabled -Dcompositor=enabled -Ddrm=disabled
+meson compile -C build
+meson install -C build
+```
+
+Cette compilation active JPEG, PNG (dépendance de FreeType), RAW/LibRaw et Wayland.
+Pour désinstaller uniquement la copie isolée : `ninja -C ~/src/swayimg-v5.7/build uninstall`.
+Le paquet Ubuntu 4.7 reste alors disponible dans `/usr/bin`.
 
 Swayimg et LibRaw n’exigent pas GDM, GNOME Shell ni les composants de session GNOME.
 Geeqie reste disponible pour parcourir les images manuellement.
